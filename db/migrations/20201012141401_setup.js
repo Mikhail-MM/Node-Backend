@@ -5,7 +5,7 @@ exports.up = async function(knex) {
       table.increments('id');
       table.string('email').notNullable();
       table.string('hashed_password', 60).notNullable();
-      table.timestamps();
+      table.timestamps(true, true);
     });
 
     await knex.schema.createTable('posts', (table) => {
@@ -13,13 +13,13 @@ exports.up = async function(knex) {
       table.integer('user_id').unsigned().notNullable().index();
       table.string('title').notNullable();
       table.foreign('user_id').references('users.id').onDelete('CASCADE');
-      table.timestamps();
+      table.timestamps(true, true);
     });
 
     await knex.schema.createTable('tags', (table) => {
       table.increments('id').primary();
       table.string('title').notNullable();
-      table.timestamps();
+      table.timestamps(true, true);
     }),
 
     await knex.schema.createTable('posts_tags', (table) => {

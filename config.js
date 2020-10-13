@@ -1,7 +1,11 @@
 const path = require('path');
 const knexfile = require('./knexfile');
 
+require('dotenv').config({ 
+  path: path.join(__dirname, '/.env')
+});
+
 module.exports = {
   knexfile,
-  apiPort: 7000,
+  APIPort: 7000,
 }

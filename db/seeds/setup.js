@@ -1,30 +1,30 @@
 const bcrypt = require('bcrypt');
 const plaintextPW = 'my_plain_text_robot_password';
 
-function generateHashedString(string) {
-  return bcrypt.hash(string, 10, (err, hash) => {
-    if (err) {
-      return console.log(err);
-    } else return hash;
-  })
-}
+const getHashedPassword = () => new Promise((resolve, reject) => {
+  bcrypt.hash(plaintextPW, 10, function(err, hash) {
+    if (err) reject(err)
+    resolve(hash)
+  });
+})
 
-const placeholderPassword = generateHashedString(plaintextPW);
-
-const usersData = [
+const usersData = (password) => ([
   {
+    id: 1,
     email: 'test1@bonkers.com',
-    hashed_password: placeholderPassword
+    hashed_password: password
+  },
+  { 
+    id: 2,
+    email: 'test1@bonkers.com',
+    hashed_password: password
   },
   {
+    id: 3,
     email: 'test1@bonkers.com',
-    hashed_password: placeholderPassword
-  },
-  {
-    email: 'test1@bonkers.com',
-    hashed_password: placeholderPassword
+    hashed_password: password
   }
-]
+])
 
 const postsData = [
   {
@@ -41,16 +41,8 @@ const tagsData = [
 ]
 
 
-exports.seed = function(knex) {
-  Promise.all([
-    knex('users').del(),
-    knex('posts').del(),
-    knex('tags').del(),
-  ]).then(() => {
-    Promise.all([
-      knex('users').insert(usersData),
-      knex('posts').insert(postsData),
-      knex('tags').insert(tagsData),
-    ])
-  })
+exports.seed = async function(knex) {
+  await knex('users').del();
+  const pw = await getHashedPassword();
+  await knex('users').insert(usersData(pw));
 } 
