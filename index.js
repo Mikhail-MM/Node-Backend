@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 // All Indexed Routers
-const { UsersRouter } = require('./api/routers/UsersRouter');
+const { UsersRouter, PostsRouter, TagsRouter } = require('./api/routers/index');
 
 // Database Configuration
 const { db } = require("./db/database");
@@ -46,6 +46,9 @@ app.use("*", attachRequestID);
 
 // Routers
 app.use('/users', UsersRouter);
+app.use('/posts', PostsRouter);
+app.use('/tags', TagsRouter);
+
 //Sanity Check
 app.get("/", (req, res, next) => {
   res.send("Server is running.");

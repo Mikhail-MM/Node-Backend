@@ -54,6 +54,9 @@ const updateUser = async (req, res, next) => {
     const data = await updateUserByID({ id, payload: req.body });
     res.json({ data });
   } catch(err) {
+    console.log("Check err");
+    console.log(err);
+    console.log(err.code);
     next(err);
   }
 }

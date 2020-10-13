@@ -10,17 +10,14 @@ const getHashedPassword = () => new Promise((resolve, reject) => {
 
 const usersData = (password) => ([
   {
-    id: 1,
     email: 'test1@bonkers.com',
     hashed_password: password
   },
   { 
-    id: 2,
     email: 'test2@bonkers.com',
     hashed_password: password
   },
   {
-    id: 3,
     email: 'test3@bonkers.com',
     hashed_password: password
   }

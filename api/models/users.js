@@ -21,16 +21,7 @@ const deleteUserByID = ({ id }) => {
 }
 
 const updateUserByID = ({ id, payload }) => {
-  console.log("Get it")
   return db('users').where({ id: Number(id) }).update(payload).returning("*")
-    .then(data => data)
-    .catch(err => {
-      if (detectUniqueConstraintError(err)) {
-        // How do we improve this? Regex needs to pick up which "SET" key violated the unique constraint.
-        throw new Error("Unique Constraint Violation on User Object")
-      }
-      throw err;
-    });
 }
 
 module.exports = {
