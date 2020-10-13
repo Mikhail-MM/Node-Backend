@@ -16,12 +16,12 @@ const usersData = (password) => ([
   },
   { 
     id: 2,
-    email: 'test1@bonkers.com',
+    email: 'test2@bonkers.com',
     hashed_password: password
   },
   {
     id: 3,
-    email: 'test1@bonkers.com',
+    email: 'test3@bonkers.com',
     hashed_password: password
   }
 ])

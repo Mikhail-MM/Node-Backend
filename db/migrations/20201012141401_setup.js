@@ -6,6 +6,7 @@ exports.up = async function(knex) {
       table.string('email').notNullable();
       table.string('hashed_password', 60).notNullable();
       table.timestamps(true, true);
+      table.unique('email');
     });
 
     await knex.schema.createTable('posts', (table) => {
