@@ -4,7 +4,7 @@ const {
   findTagByID,
   deleteTagByID,
   updateTagByID
-} = require("../models/Tags");
+} = require("../models/tags");
 
 const fetchTags = async (req, res, next) => {
   try {

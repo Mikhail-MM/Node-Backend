@@ -1,5 +1,4 @@
 const { db, TABLES } = require('../../db/database');
-const { detectUniqueConstraintError } = require('../../db/parse-errors');
 
 // All of these functions return promises.
 const createTag = (data) => {
