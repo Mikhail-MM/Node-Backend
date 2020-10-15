@@ -14,6 +14,7 @@ const { UsersRouter, PostsRouter, TagsRouter } = require('./api/routers/index');
 
 // Database Configuration
 const { db } = require("./db/database");
+const { redis } = require('./db/redis');
 
 // All Request Have a Unique ID for Logging Purposes
 const { attachRequestID } = require("./utils/middleware/attachRequestID");
@@ -86,12 +87,14 @@ app.listen(APIPort, () => {
   );
 });
 
+console.log("Testing Connection")
 // Test DB Connection
 db.raw("SELECT tablename FROM pg_tables WHERE schemaname='public'")
   .then((result) => {
     InfoLogger.info(result.rows);
     InfoLogger.info(`Database Queried Successfully`);
   })
-  .catch((err) =>
-    ErrorLogger.error({ message: err.message, stack: err.stack })
-  );
+  .catch((err) =>{
+    ErrorLogger.error({ message: `PG Connection Failed: ${err.message}`, stack: err.stack })
+    process.exit(1);
+  });
