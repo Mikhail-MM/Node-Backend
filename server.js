@@ -77,6 +77,7 @@ app.get("/test-session", (req, res, next) => {
     session: req.session,
     cookies: req.cookies,
     signedCookies: req.signedCookies,
+    sessionExpirationTime: req.session.cookie.maxAge / 1000
   });
 })
 
