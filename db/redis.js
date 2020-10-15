@@ -3,7 +3,7 @@ const Redis = require('ioredis');
 
 const { ErrorLogger, InfoLogger } = require('../logger');
 
-const redis = new Redis({
+const ioredis = new Redis({
   host: process.env.DATABASE_HOST,
   maxRetriesPerRequest: 20,
   retryStrategy(times) {
@@ -12,15 +12,16 @@ const redis = new Redis({
   }
 });
 
-redis.on('connect', () => {
+ioredis.on('connect', () => {
   InfoLogger.info("Redis Connection Initialized.")
-})
+});
 
-redis.on("disconnect", () => {
+ioredis.on("disconnect", () => {
   InfoLogger.info("Redis Connection Destroyed.")
-})
-redis.on('error', ({ message, ...rest}) => {
-  ErrorLogger.error({ message: `Redis Connection Failed: ${message}`, ...rest});
-})
+});
 
-module.exports = { redis }
+ioredis.on('error', ({ message, ...rest}) => {
+  ErrorLogger.error({ message: `Redis Connection Failed: ${message}`, ...rest});
+});
+
+module.exports = { ioredis }

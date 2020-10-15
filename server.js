@@ -14,10 +14,12 @@ const { UsersRouter, PostsRouter, TagsRouter } = require('./api/routers/index');
 
 // Database Configuration
 const { db } = require("./db/database");
-const { redis } = require('./db/redis');
 
-// All Request Have a Unique ID for Logging Purposes
-const { attachRequestID } = require("./utils/middleware/attachRequestID");
+
+// Middleware
+const { attachRequestID } = require("./middleware/attachRequestID");
+const { sessionParser } = require("./middleware/sessionParser");
+const { cookieParser } = require("./middleware/cookieParser");
 
 // Separate Logger for Info & Error
 const { InfoLogger, ErrorLogger } = require("./logger");
@@ -43,7 +45,9 @@ app.set('trust proxy', true);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({ origin: true }));
-app.use("*", attachRequestID);
+app.use(cookieParser);
+app.use(attachRequestID);
+app.use(sessionParser);
 
 // Routers
 app.use('/users', UsersRouter);
@@ -55,6 +59,26 @@ app.get("/", (req, res, next) => {
   res.send("Server is running.");
 });
 
+app.get("/test-session", (req, res, next) => {
+  if (!req.session.views) {
+    req.session.views = 1;
+    req.session.message = "First Session View.";
+  } else if (req.session.views < 20) {
+    req.session.views++;
+    req.session.message = `Views: ${req.session.views}`
+  } else {
+    req.session.destroy();
+    return res.send("Your session has been destroyed after 20 views.")
+  }
+  return res.json({
+    requestId: res.locals.requestId,
+    message: "Testing Sessions",
+    sessionID: req.sessionID,
+    session: req.session,
+    cookies: req.cookies,
+    signedCookies: req.signedCookies,
+  });
+})
 
 // Express Error Handler
 app.use("*", function (err, req, res, next) {
@@ -87,14 +111,13 @@ app.listen(APIPort, () => {
   );
 });
 
-console.log("Testing Connection")
 // Test DB Connection
 db.raw("SELECT tablename FROM pg_tables WHERE schemaname='public'")
-  .then((result) => {
-    InfoLogger.info(result.rows);
-    InfoLogger.info(`Database Queried Successfully`);
-  })
-  .catch((err) =>{
-    ErrorLogger.error({ message: `PG Connection Failed: ${err.message}`, stack: err.stack })
-    process.exit(1);
-  });
+.then((result) => {
+  InfoLogger.info(result.rows);
+  InfoLogger.info(`Database Queried Successfully`);
+})
+.catch((err) =>{
+  ErrorLogger.error({ message: `PG Connection Failed: ${err.message}`, stack: err.stack })
+  process.exit(1);
+});
