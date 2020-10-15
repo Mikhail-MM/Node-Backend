@@ -9,19 +9,22 @@ const ioredis = new Redis({
   retryStrategy(times) {
     const delay = Math.min(times * 50, 2000);
     return delay;
-  }
+  },
 });
 
 ioredis.on('connect', () => {
-  InfoLogger.info("Redis Connection Initialized.")
+  InfoLogger.info('Redis Connection Initialized.');
 });
 
-ioredis.on("disconnect", () => {
-  InfoLogger.info("Redis Connection Destroyed.")
+ioredis.on('disconnect', () => {
+  InfoLogger.info('Redis Connection Destroyed.');
 });
 
-ioredis.on('error', ({ message, ...rest}) => {
-  ErrorLogger.error({ message: `Redis Connection Failed: ${message}`, ...rest});
+ioredis.on('error', ({ message, ...rest }) => {
+  ErrorLogger.error({
+    message: `Redis Connection Failed: ${message}`,
+    ...rest,
+  });
 });
 
-module.exports = { ioredis }
+module.exports = { ioredis };

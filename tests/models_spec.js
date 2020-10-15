@@ -6,36 +6,34 @@ const {
   findAllPosts,
   findPostByID,
   deletePostByID,
-  updatePostByID
-} = require("../api/models/posts");
+  updatePostByID,
+} = require('../api/models/posts');
 
 const {
   createTag,
   findAllTags,
   findTagByID,
   deleteTagByID,
-  updateTagByID
-} = require("../api/models/tags");
+  updateTagByID,
+} = require('../api/models/tags');
 
 const {
   createUser,
   findAllUsers,
   findUserByID,
   deleteUserByID,
-  updateUserByID
-} = require("../api/models/users");
+  updateUserByID,
+} = require('../api/models/users');
 
 // TODO: Use a Testing DB for this.
 
 describe('Post Model Methods', () => {
-  
   afterEach(() => {
-    return db(TABLES.POSTS_TAGS).del()
+    return db(TABLES.POSTS_TAGS)
+      .del()
       .then(() => db(TABLES.POSTS).del())
-      .then(() => db(TABLES.TAGS).del())
+      .then(() => db(TABLES.TAGS).del());
   });
 
-  it('Creates a new user.', () => {
-
-  });
-})
+  it('Creates a new user.', () => {});
+});

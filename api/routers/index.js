@@ -5,5 +5,5 @@ const { TagsRouter } = require('./TagsRouter');
 module.exports = {
   UsersRouter,
   PostsRouter,
-  TagsRouter
-}
+  TagsRouter,
+};

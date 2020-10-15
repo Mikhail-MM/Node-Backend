@@ -5,7 +5,7 @@ module.exports.TABLES = {
   USERS: 'users',
   POSTS: 'posts',
   TAGS: 'tags',
-  POSTS_TAGS: 'posts_tags'
-}
+  POSTS_TAGS: 'posts_tags',
+};
 
-module.exports.db = knex(knexfile)
+module.exports.db = knex(knexfile);

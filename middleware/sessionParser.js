@@ -10,4 +10,4 @@ const sessionParser = session({
   saveUninitialized: true,
 });
 
-module.exports = { sessionParser }
+module.exports = { sessionParser };

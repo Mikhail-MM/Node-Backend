@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router } = require('express');
 
 const {
   fetchPosts,
@@ -6,15 +6,15 @@ const {
   registerNewPost,
   deletePost,
   updatePost,
-}= require("../controllers/Posts-api");
+} = require('../controllers/Posts-api');
 
 const PostsRouter = Router();
 
-PostsRouter.get("/:id", fetchPost);
-PostsRouter.get("/", fetchPosts);
+PostsRouter.get('/:id', fetchPost);
+PostsRouter.get('/', fetchPosts);
 
-PostsRouter.post("/", registerNewPost);
-PostsRouter.put("/:id", updatePost);
-PostsRouter.delete("/:id", deletePost);
+PostsRouter.post('/', registerNewPost);
+PostsRouter.put('/:id', updatePost);
+PostsRouter.delete('/:id', deletePost);
 
 module.exports.PostsRouter = PostsRouter;
