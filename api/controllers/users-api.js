@@ -6,6 +6,8 @@ const {
   updateUserByID,
 } = require('../models/users');
 
+const { encryptPassword } = require('../../utils/crypto');
+
 const fetchUsers = async (req, res, next) => {
   try {
     const data = await findAllUsers();
@@ -27,7 +29,9 @@ const fetchUser = async (req, res, next) => {
 
 const registerNewUser = async (req, res, next) => {
   try {
-    const data = await createUser({});
+    const { password, ...userData } = req.body;
+    const hashed_password = await encryptPassword(password);
+    const data = await createUser({ hashed_password, ...userData });
     res.json({ data });
   } catch (err) {
     next(err);

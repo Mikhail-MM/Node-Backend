@@ -62,6 +62,8 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/test-session', (req, res, next) => {
+  console.log("Yeehaw bruh");
+  InfoLogger.info({ message: "Ok sir? "})
   if (!req.session.views) {
     req.session.views = 1;
     req.session.message = 'First Session View.';

@@ -35,5 +35,7 @@ describe('Post Model Methods', () => {
       .then(() => db(TABLES.TAGS).del());
   });
 
-  it('Creates a new user.', () => {});
+  it('Creates a new user.', () => {
+    return true;
+  });
 });
