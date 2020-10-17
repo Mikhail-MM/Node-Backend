@@ -2,11 +2,15 @@ const { db, TABLES } = require('../../db/database');
 
 // All of these functions return promises.
 const createUser = ({ email, hashed_password }) => {
-  console.log({ email, hashed_password })
-  return db
-    .insert({ email, hashed_password })
+  return db.insert({ email, hashed_password })
     .into(TABLES.USERS)
-    .returning('*');
+    .returning('*')
+    .then((data) => {
+      if (!data.length) {
+        throw new Error('Error adding user to the Database');
+      }
+      return data[0];
+    });
 };
 
 const findAllUsers = () => {

@@ -1,17 +1,5 @@
 const { TABLES } = require('../database');
-const { encryptPassword } = require('../../utils/crypto');
-
-const generateUsers = async (numUsers = 5) => {
-  const hashed_password = await encryptPassword('test_data').catch(
-    (err) => {
-      throw err;
-    },
-  );
-  return Array.from({ length: numUsers }).map((_el, index) => ({
-    email: `test+${index}@dummyemail.com`,
-    hashed_password,
-  }));
-};
+const { generateTestUsers } = require('../../tests/data/generateUsers');
 
 const postsData = [
   {
@@ -29,5 +17,5 @@ const tagsData = [
 
 exports.seed = async function (knex) {
   await knex(TABLES.USERS).del();
-  await knex(TABLES.USERS).insert( await generateUsers() );
+  await knex(TABLES.USERS).insert( await generateTestUsers() );
 };

@@ -30,9 +30,11 @@ const fetchUser = async (req, res, next) => {
 const registerNewUser = async (req, res, next) => {
   try {
     const { password, ...userData } = req.body;
-    const hashed_password = await encryptPassword(password);
-    const data = await createUser({ hashed_password, ...userData });
-    res.json({ data });
+    const { hashed_password, ...newUserData} = await createUser({
+      hashed_password: await encryptPassword(password),
+      ...userData,
+    });
+    res.send(newUserData);
   } catch (err) {
     next(err);
   }

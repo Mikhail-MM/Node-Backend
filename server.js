@@ -62,7 +62,6 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/test-session', (req, res, next) => {
-  console.log("Yeehaw bruh");
   InfoLogger.info({ message: "Ok sir? "})
   if (!req.session.views) {
     req.session.views = 1;
@@ -112,7 +111,7 @@ app.use('*', function (err, req, res, next) {
   }
 });
 
-app.listen(APIPort, () => {
+const server = app.listen(APIPort, () => {
   InfoLogger.info(
     `Server running on port ${APIPort} in ${process.env.NODE_ENV} mode.`,
   );
@@ -131,3 +130,5 @@ db.raw("SELECT tablename FROM pg_tables WHERE schemaname='public'")
     });
     process.exit(1);
   });
+
+module.exports = { server };
