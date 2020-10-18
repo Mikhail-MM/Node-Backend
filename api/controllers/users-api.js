@@ -14,7 +14,7 @@ const { encryptPassword } = require('../../utils/crypto');
 const fetchUsers = async (req, res, next) => {
   try {
     const data = await findAllUsers();
-    res.json({ data });
+    res.send(data);
   } catch (err) {
     next(err);
   }
@@ -24,7 +24,7 @@ const fetchUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await findUserByID({ id });
-    res.json({ data });
+    res.send(data);
   } catch (err) {
     next(err);
   }
@@ -56,9 +56,7 @@ const deleteUser = async (req, res, next) => {
     const { id } = req.params;
     const data = await deleteUserByID({ id });
     if (!data) {
-      res
-        .status(400)
-        .send(`User (ID: ${id}) does not exist.` );
+      res.status(400).send(`User (ID: ${id}) does not exist.`);
     } else {
       res.send(`User (ID: ${id}) deleted.`);
     }
@@ -87,6 +85,7 @@ const loginUser = async (req, res, next) => {
     if (!email || !password) {
       res.status(400).send('Missing Credentials.');
     }
+    console.log('Got user');
     const [userExists] = await findUsersByLookup({
       email: req.body.email,
     });
@@ -95,35 +94,46 @@ const loginUser = async (req, res, next) => {
         .status(400)
         .send(`Account '${email}' does not exist`);
     }
+
     const { hashed_password, id } = userExists;
     const match = await bcrypt.compare(password, hashed_password);
 
     if (!match) {
-      return res.status(403).send("Incorrect Password.");
+      return res.status(403).send('Incorrect Password.');
     }
 
-    req.session.userId = id;
-    res.json({ id });
-  } catch (err) {}
+    req.session.user_id = id;
+    res.json({ user_id: id });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const checkSession = async (req, res, next) => {
-  console.log("Checking Session.");
-  console.log(req.session);
-  if (req.session.userId) {
-    res.json({ userId: req.session.userId });
-  } else {
-    res.json({ isAuthenticated: false })
+  try {
+    console.log('Checking Session.');
+    console.log(req.session);
+    if (req.session.user_id) {
+      res.json({ user_id: req.session.user_id });
+    } else {
+      res.json({ isAuthenticated: false });
+    }
+  } catch (err) {
+    next(err);
   }
-}
+};
 
 const logOut = async (req, res, next) => {
-  if (!req.session.userId) {
-    return res.status(400).send("You are already logged out.");
+  try {
+    if (!req.session.user_id) {
+      return res.status(400).send('You are already logged out.');
+    }
+    req.session.destroy();
+    res.send('You have been logged out.');
+  } catch (err) {
+    next(err);
   }
-  req.session.destroy();
-  res.send("You have been logged out.");
-}
+};
 
 module.exports = {
   fetchUsers,
@@ -133,5 +143,5 @@ module.exports = {
   updateUser,
   loginUser,
   checkSession,
-  logOut
+  logOut,
 };

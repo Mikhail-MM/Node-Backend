@@ -9,7 +9,7 @@ const {
 const fetchPosts = async (req, res, next) => {
   try {
     const data = await findAllPosts();
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }
@@ -19,7 +19,7 @@ const fetchPost = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await findPostByID({ id });
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }
@@ -27,8 +27,10 @@ const fetchPost = async (req, res, next) => {
 
 const registerNewPost = async (req, res, next) => {
   try {
-    const data = await createPost(req.body);
-    res.json({ data });
+    const { title, content } = req.body;
+    const { user_id } = req.session;
+    const data = await createPost({ title, content, user_id });
+    res.send( data );
   } catch (err) {
     next(err);
   }
@@ -54,7 +56,7 @@ const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await updatePostByID({ id, payload: req.body });
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }

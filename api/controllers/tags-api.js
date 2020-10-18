@@ -9,7 +9,7 @@ const {
 const fetchTags = async (req, res, next) => {
   try {
     const data = await findAllTags();
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }
@@ -19,7 +19,7 @@ const fetchTag = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await findTagByID({ id });
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }
@@ -28,7 +28,7 @@ const fetchTag = async (req, res, next) => {
 const registerNewTag = async (req, res, next) => {
   try {
     const data = await createTag(req.body);
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }
@@ -54,7 +54,7 @@ const updateTag = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await updateTagByID({ id, payload: req.body });
-    res.json({ data });
+    res.send( data );
   } catch (err) {
     next(err);
   }
