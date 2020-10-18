@@ -62,7 +62,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/test-session', (req, res, next) => {
-  InfoLogger.info({ message: "Ok sir? "})
+  InfoLogger.info({ message: 'Ok sir? ' });
   if (!req.session.views) {
     req.session.views = 1;
     req.session.message = 'First Session View.';
@@ -97,8 +97,8 @@ app.use('*', function (err, req, res, next) {
     };
 
     ErrorLogger.error(errorData);
-
-    res.status(err.response.status).json({ errorData });
+    
+    res.status(err.response.status).send(err.response.data);
   } else {
     const errorData = {
       message: err.message,
@@ -107,7 +107,7 @@ app.use('*', function (err, req, res, next) {
 
     ErrorLogger.error(errorData);
 
-    res.status(500).json({ errorData });
+    res.status(500).send(err.message);
   }
 });
 
