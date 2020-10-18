@@ -41,9 +41,9 @@ const deleteTag = async (req, res, next) => {
     if (!data) {
       res
         .status(400)
-        .json({ message: `Tag (ID: ${id}) does not exist.` });
+        .json(`Tag (ID: ${id}) does not exist.`);
     } else {
-      res.json({ message: `Tag (ID: ${id}) deleted.` });
+      res.json(`Tag (ID: ${id}) deleted.`);
     }
   } catch (err) {
     next(err);

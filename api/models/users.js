@@ -26,6 +26,13 @@ const findUserByID = ({ id }) => {
   // OR knex(TABLES.USERS).where({ id })
 };
 
+const findUsersByLookup = (lookup) => {
+  return db
+    .select()
+    .from(TABLES.USERS)
+    .where(lookup);
+}
+
 const deleteUserByID = ({ id }) => {
   return db('users')
     .where({ id: Number(id) })
@@ -45,4 +52,5 @@ module.exports = {
   findUserByID,
   deleteUserByID,
   updateUserByID,
+  findUsersByLookup,
 };

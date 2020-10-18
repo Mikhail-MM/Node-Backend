@@ -1,7 +1,10 @@
+const bcrypt = require('bcrypt');
+
 const {
   createUser,
   findAllUsers,
   findUserByID,
+  findUsersByLookup,
   deleteUserByID,
   updateUserByID,
 } = require('../models/users');
@@ -30,7 +33,15 @@ const fetchUser = async (req, res, next) => {
 const registerNewUser = async (req, res, next) => {
   try {
     const { password, ...userData } = req.body;
-    const { hashed_password, ...newUserData} = await createUser({
+    const [userExists] = await findUsersByLookup({
+      email: req.body.email,
+    });
+    if (userExists) {
+      return res
+        .status(409)
+        .send('A user already exists with this email address.');
+    }
+    const { hashed_password, ...newUserData } = await createUser({
       hashed_password: await encryptPassword(password),
       ...userData,
     });
@@ -47,9 +58,9 @@ const deleteUser = async (req, res, next) => {
     if (!data) {
       res
         .status(400)
-        .json({ message: `User (ID: ${id}) does not exist.` });
+        .send(`User (ID: ${id}) does not exist.` );
     } else {
-      res.json({ message: `User (ID: ${id}) deleted.` });
+      res.send(`User (ID: ${id}) deleted.`);
     }
   } catch (err) {
     next(err);
@@ -63,10 +74,36 @@ const updateUser = async (req, res, next) => {
     res.json({ data });
   } catch (err) {
     console.log('Check err');
+    // TODO: Unique Constraint Validation Errors.
     console.log(err);
     console.log(err.code);
     next(err);
   }
+};
+
+const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      res.status(400).send('Missing Credentials.');
+    }
+    const [userExists] = await findUsersByLookup({
+      email: req.body.email,
+    });
+    if (!userExists) {
+      return res
+        .status(400)
+        .send(`Account '${email}' does not exist`);
+    }
+    const { hashed_password, id } = userExists;
+    const match = await bcrypt.compare(password, hashed_password);
+
+    if (!match) {
+      res.status(403).send("Incorrect Password.");
+    }
+
+    res.json({ id });
+  } catch (err) {}
 };
 
 module.exports = {
@@ -75,4 +112,5 @@ module.exports = {
   registerNewUser,
   deleteUser,
   updateUser,
+  loginUser,
 };
