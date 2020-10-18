@@ -103,7 +103,6 @@ const loginUser = async (req, res, next) => {
     }
 
     req.session.userId = id;
-    console.log(req.session);
     res.json({ id });
   } catch (err) {}
 };
@@ -118,6 +117,14 @@ const checkSession = async (req, res, next) => {
   }
 }
 
+const logOut = async (req, res, next) => {
+  if (!req.session.userId) {
+    return res.status(400).send("You are already logged out.");
+  }
+  req.session.destroy();
+  res.send("You have been logged out.");
+}
+
 module.exports = {
   fetchUsers,
   fetchUser,
@@ -125,5 +132,6 @@ module.exports = {
   deleteUser,
   updateUser,
   loginUser,
-  checkSession
+  checkSession,
+  logOut
 };
