@@ -99,12 +99,24 @@ const loginUser = async (req, res, next) => {
     const match = await bcrypt.compare(password, hashed_password);
 
     if (!match) {
-      res.status(403).send("Incorrect Password.");
+      return res.status(403).send("Incorrect Password.");
     }
 
+    req.session.userId = id;
+    console.log(req.session);
     res.json({ id });
   } catch (err) {}
 };
+
+const checkSession = async (req, res, next) => {
+  console.log("Checking Session.");
+  console.log(req.session);
+  if (req.session.userId) {
+    res.json({ userId: req.session.userId });
+  } else {
+    res.json({ isAuthenticated: false })
+  }
+}
 
 module.exports = {
   fetchUsers,
@@ -113,4 +125,5 @@ module.exports = {
   deleteUser,
   updateUser,
   loginUser,
+  checkSession
 };

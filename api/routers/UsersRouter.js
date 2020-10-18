@@ -7,10 +7,12 @@ const {
   deleteUser,
   updateUser,
   loginUser,
+  checkSession
 } = require('../controllers/users-api');
 
 const UsersRouter = Router();
 
+UsersRouter.get('/checkSession', checkSession);
 UsersRouter.get('/:id', fetchUser);
 UsersRouter.get('/', fetchUsers);
 
