@@ -1,8 +1,9 @@
+const faker = require('faker');
 const { encryptPassword } = require('../../utils/crypto');
 
 const generateTestUsers = async (numUsers = 5) => {
 
-  const hashed_password = await encryptPassword('test_data').catch(
+  const hashed_password = await encryptPassword(process.env.TEST_USER_PASSWORD).catch(
     (err) => {
       throw err;
     },
@@ -14,13 +15,13 @@ const generateTestUsers = async (numUsers = 5) => {
 
   if (Number(numUsers) < 2) {
     return {
-      email: `test+0@dummyemail.com`,
+      email: faker.internet.email(),
       hashed_password,
     }
   } else {
 
     return Array.from({ length: numUsers }).map((_el, index) => ({
-      email: `test+${index}@dummyemail.com`,
+      email: faker.internet.email(),
       hashed_password,
     }));
 

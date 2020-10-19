@@ -33,7 +33,11 @@ const findAllPosts = () => {
       `${TABLES.POSTS_TAGS}.tags_id`,
       `${TABLES.TAGS}.id`,
     )
-    .groupBy(`${TABLES.POSTS}.id`, 'posts_tags.posts_id', 'users.email')
+    .groupBy(
+      `${TABLES.POSTS}.id`,
+      `${TABLES.POSTS_TAGS}.posts_id`,
+      `${TABLE.USERS}.email`,
+    )
     .orderBy('created_at', 'desc');
 };
 

@@ -5,7 +5,7 @@ const { server } = require('../server');
 const { db, TABLES } = require('../db/database');
 
 const { assert } = chai;
-const { generateTestUsers } = require('../tests/data/generateUsers');
+const { generateTestUsers } = require('../db/factories/generateUsers');
 
 const {
   createUser,
