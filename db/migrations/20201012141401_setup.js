@@ -29,6 +29,8 @@ exports.up = async function (knex) {
       table.increments();
       table.integer('posts_id').unsigned().notNullable().index();
       table.integer('tags_id').unsigned().notNullable().index();
+      table.unique('posts_id');
+      table.unique('tags_id');
       table
         .foreign('posts_id')
         .references('posts.id')

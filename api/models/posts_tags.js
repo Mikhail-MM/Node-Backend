@@ -1,14 +1,16 @@
 const { db, TABLES } = require('../../db/database');
 
-const createPostTagRelationship = ({ posts_id, tags_id }) => {
+// Relation is an array of { posts_id: Number, tags_id: Number }
+const createPostTagRelationship = (relation) => {
   // TODO: Handle Multiple (Array of Objects)
+  console.log(relation)
   return db(TABLES.POSTS_TAGS)
-    .insert({ posts_id, tags_id })
+    .insert(relation)
     .returning('*');
 };
 
-const removePostsTagRelationship = ({ id }) => {
+const removePostsTagRelationshipById = ({ id }) => {
   return db(TABLES.POSTS_TAGS).where({ id }).del();
 };
 
-export { createPostTagRelationship, removePostsTagRelationship };
+module.exports = { createPostTagRelationship, removePostsTagRelationshipById };

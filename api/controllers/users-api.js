@@ -111,8 +111,6 @@ const loginUser = async (req, res, next) => {
 
 const checkSession = async (req, res, next) => {
   try {
-    console.log('Checking Session.');
-    console.log(req.session);
     if (req.session.user_id) {
       res.json({ user_id: req.session.user_id });
     } else {

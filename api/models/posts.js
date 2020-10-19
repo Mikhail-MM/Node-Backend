@@ -9,7 +9,32 @@ const createPost = ({ title, user_id, content }) => {
 };
 
 const findAllPosts = () => {
-  return db.select(`${TABLES.POSTS}.*`, `${TABLES.USERS}.email as posted_by`).from(TABLES.POSTS).join(TABLES.USERS, `${TABLES.USERS}.id`, `${TABLES.POSTS}.user_id`).orderBy('created_at', 'desc');
+  return db
+    .select(
+      `${TABLES.POSTS}.title`,
+      `${TABLES.POSTS}.content`,
+      `${TABLES.POSTS}.created_at`,
+      db.raw(`ARRAY_AGG(${TABLES.TAGS}.title) as tag_name`),
+      `${TABLES.USERS}.email as posted_by`,
+    )
+    .from(TABLES.POSTS)
+    .join(
+      TABLES.USERS,
+      `${TABLES.USERS}.id`,
+      `${TABLES.POSTS}.user_id`,
+    )
+    .join(
+      TABLES.POSTS_TAGS,
+      `${TABLES.POSTS_TAGS}.posts_id`,
+      `${TABLES.POSTS}.id`,
+    )
+    .join(
+      TABLES.TAGS,
+      `${TABLES.POSTS_TAGS}.tags_id`,
+      `${TABLES.TAGS}.id`,
+    )
+    .groupBy(`${TABLES.POSTS}.id`, 'posts_tags.posts_id', 'users.email')
+    .orderBy('created_at', 'desc');
 };
 
 const findPostByID = ({ id }) => {
