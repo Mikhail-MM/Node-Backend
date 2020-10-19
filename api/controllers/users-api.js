@@ -45,6 +45,8 @@ const registerNewUser = async (req, res, next) => {
       hashed_password: await encryptPassword(password),
       ...userData,
     });
+    const { id } = newUserData;
+    req.session.user_id = id;
     res.send(newUserData);
   } catch (err) {
     next(err);

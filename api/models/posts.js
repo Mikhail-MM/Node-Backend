@@ -14,21 +14,21 @@ const findAllPosts = () => {
       `${TABLES.POSTS}.title`,
       `${TABLES.POSTS}.content`,
       `${TABLES.POSTS}.created_at`,
-      db.raw(`ARRAY_AGG(${TABLES.TAGS}.title) as tag_name`),
+      db.raw(`ARRAY_REMOVE(ARRAY_AGG(${TABLES.TAGS}.title), NULL) as tags`),
       `${TABLES.USERS}.email as posted_by`,
     )
     .from(TABLES.POSTS)
-    .join(
+    .leftJoin(
       TABLES.USERS,
       `${TABLES.USERS}.id`,
       `${TABLES.POSTS}.user_id`,
     )
-    .join(
+    .leftJoin(
       TABLES.POSTS_TAGS,
       `${TABLES.POSTS_TAGS}.posts_id`,
       `${TABLES.POSTS}.id`,
     )
-    .join(
+    .leftJoin(
       TABLES.TAGS,
       `${TABLES.POSTS_TAGS}.tags_id`,
       `${TABLES.TAGS}.id`,
@@ -36,7 +36,7 @@ const findAllPosts = () => {
     .groupBy(
       `${TABLES.POSTS}.id`,
       `${TABLES.POSTS_TAGS}.posts_id`,
-      `${TABLE.USERS}.email`,
+      `${TABLES.USERS}.email`,
     )
     .orderBy('created_at', 'desc');
 };
