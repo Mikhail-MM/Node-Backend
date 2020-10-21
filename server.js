@@ -1,5 +1,6 @@
 const process = require('process');
 const path = require('path');
+const http = require('http');
 
 require('dotenv').config({
   path: path.join(__dirname, '/.env'),
@@ -125,13 +126,9 @@ app.use('*', function (err, req, res, next) {
 
 const socketSwitchBoard = new Map();
 
-const wss = new WebSocket.Server({ port: process.env.WEBSOCKET_PORT });
+const wss = new WebSocket.Server({ clientTracking: false, noServer: true });
 
-const server = app.listen(APIPort, () => {
-  InfoLogger.info(
-    `Server running on port ${APIPort} in ${process.env.NODE_ENV} mode.`,
-  );
-});
+const server = http.createServer(app);
 
 server.on('upgrade', (req, socket, head) => {
   console.log("HTTP Upgrade Request Detected");
@@ -140,6 +137,7 @@ server.on('upgrade', (req, socket, head) => {
   sessionParser(req, {}, () => {
     console.log(req.session);
     if (!req.session.user_id) {
+      console.log("Unauthorized eh")
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
       socket.destroy();
       return;
@@ -152,17 +150,24 @@ server.on('upgrade', (req, socket, head) => {
 
 wss.on('connection', (ws, req) => {
   console.log("WSS Connection Event - Parsing User ID!");
-  const { user_id } = request.session;
+  const { user_id } = req.session;
+  console.log("Adding user to switchboard", user_id);
   socketSwitchBoard.set(user_id, ws);
   ws.on('message', (message) => {
-    // can access session properties
-    console.log("Message:", message, "user", user_id);
+    //c an access session properties
+    console.log("Message:", message);
   })
   ws.on('close', () => {
+    console.log("User Disconnected, deleting from switchboard:", user_id)
     socketSwitchBoard.delete(user_id);
   });
 });
 
+server.listen(APIPort, () => {
+  InfoLogger.info(
+    `Server running on port ${APIPort} in ${process.env.NODE_ENV} mode.`,
+  );
+});
 
 // Test DB Connection
 db.raw("SELECT tablename FROM pg_tables WHERE schemaname='public'")
