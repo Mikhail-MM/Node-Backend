@@ -14,6 +14,7 @@ const {
   UsersRouter,
   PostsRouter,
   TagsRouter,
+  ChatRoomsRouter
 } = require('./api/routers/index');
 
 // Database Configuration
@@ -55,6 +56,7 @@ app.use(sessionParser);
 app.use('/users', UsersRouter);
 app.use('/posts', PostsRouter);
 app.use('/tags', TagsRouter);
+app.use('/chatrooms', ChatRoomsRouter);
 
 //Sanity Check
 app.get('/', (req, res, next) => {
