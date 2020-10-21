@@ -87,7 +87,6 @@ const loginUser = async (req, res, next) => {
     if (!email || !password) {
       res.status(400).send('Missing Credentials.');
     }
-    console.log('Got user');
     const [userExists] = await findUsersByLookup({
       email: req.body.email,
     });
@@ -103,7 +102,6 @@ const loginUser = async (req, res, next) => {
     if (!match) {
       return res.status(403).send('Incorrect Password.');
     }
-
     req.session.user_id = id;
     res.json({ user_id: id });
   } catch (err) {

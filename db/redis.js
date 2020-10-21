@@ -5,6 +5,8 @@ const { ErrorLogger, InfoLogger } = require('../logger');
 
 const ioredis = new Redis({
   host: process.env.DATABASE_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
   maxRetriesPerRequest: 20,
   retryStrategy(times) {
     const delay = Math.min(times * 50, 2000);

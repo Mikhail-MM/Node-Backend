@@ -5,6 +5,8 @@ require('dotenv').config({
   path: path.join(__dirname, '/.env'),
 });
 
+const WebSocket = require('ws');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -30,6 +32,7 @@ const { cookieParser } = require('./middleware/cookieParser');
 const { InfoLogger, ErrorLogger } = require('./logger');
 
 const { APIPort } = require('./config');
+const { request } = require('http');
 
 // Log Unhandled Exceptions to File
 process
@@ -89,7 +92,9 @@ app.get('/test-session', (req, res, next) => {
 });
 
 // 404 Handler
-app.use('*', (req, res, next) => res.status(404).send("This route does not exist."));
+app.use('*', (req, res, next) => { 
+  res.status(404).send("This route does not exist.")
+});
 
 // Express Error Handler
 app.use('*', function (err, req, res, next) {
@@ -116,11 +121,48 @@ app.use('*', function (err, req, res, next) {
   }
 });
 
+// WebSocket Implementation
+
+const socketSwitchBoard = new Map();
+
+const wss = new WebSocket.Server({ port: process.env.WEBSOCKET_PORT });
+
 const server = app.listen(APIPort, () => {
   InfoLogger.info(
     `Server running on port ${APIPort} in ${process.env.NODE_ENV} mode.`,
   );
 });
+
+server.on('upgrade', (req, socket, head) => {
+  console.log("HTTP Upgrade Request Detected");
+  console.log("Parsing Express Session");
+  console.log(req.session);
+  sessionParser(req, {}, () => {
+    console.log(req.session);
+    if (!req.session.user_id) {
+      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+      socket.destroy();
+      return;
+    }
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit('connection', ws, req);
+    });
+  })
+});
+
+wss.on('connection', (ws, req) => {
+  console.log("WSS Connection Event - Parsing User ID!");
+  const { user_id } = request.session;
+  socketSwitchBoard.set(user_id, ws);
+  ws.on('message', (message) => {
+    // can access session properties
+    console.log("Message:", message, "user", user_id);
+  })
+  ws.on('close', () => {
+    socketSwitchBoard.delete(user_id);
+  });
+});
+
 
 // Test DB Connection
 db.raw("SELECT tablename FROM pg_tables WHERE schemaname='public'")
