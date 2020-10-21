@@ -1,0 +1,21 @@
+Select certain columns and aggregate (JSON_AGG works here too I think?)
+db.raw(`Array_Agg(json_build_object(${TABLES.TAGS}.title, ${TABLES.TAGS}.id)) as tagshere`)
+
+db.raw(`json_build_object('title', ${TABLES.TAGS}.title, 'id', ${TABLES.TAGS}.id)) as tags`)
+
+Fetch the ENTIRE ROW!
+db.raw(`JSON_AGG(${TABLES.TAGS}) as tags`)
+
+Fetch as generic names
+db.raw(`JSON_AGG(ROW(${TABLES.TAGS}.title, ${TABLES.TAGS}.id)) as tags`)
+
+
+You can also JSON_AGG with json_build_object
+
+
+
+      db.raw(`JSONB_BUILD_OBJECT("title", ARRAY_REMOVE(ARRAY_AGG(${TABLES.TAGS}.title), NULL), "id",  ) as tags`)
+      
+      
+      db.raw(`ARRAY_REMOVE(ARRAY_AGG(${TABLES.TAGS}.title), NULL) as tags`),
+      db.raw(`ARRAY_REMOVE(ARRAY_AGG(${TABLES.TAGS}.id), NULL) as tagids`),
