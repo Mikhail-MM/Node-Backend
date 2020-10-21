@@ -28,9 +28,7 @@ const fetchPost = async (req, res, next) => {
 const registerNewPost = async (req, res, next) => {
   try {
     const { user_id } = req.session;
-    console.log("WHAT THE HECKS")
     const data = await createPost({ ...req.body, user_id});
-    console.log(data);
     res.send( data );
   } catch (err) {
     next(err);

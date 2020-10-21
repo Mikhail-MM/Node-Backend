@@ -12,8 +12,6 @@ const payload = Array.from({ length: numPosts }).map(() => ({
   user_id: getRandomInt(1, numUsers),
 }));
 
-console.log(payload);
-
 exports.seed = async function (knex) {
   await knex(TABLES.POSTS).del();
   await knex(TABLES.POSTS).insert(payload);

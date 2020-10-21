@@ -2,8 +2,6 @@ const { db, TABLES } = require('../../db/database');
 
 // Relation is an array of { posts_id: Number, tags_id: Number }
 const createPostTagRelationship = (relation) => {
-  // TODO: Handle Multiple (Array of Objects)
-  console.log(relation)
   return db(TABLES.POSTS_TAGS)
     .insert(relation)
     .returning('*');
