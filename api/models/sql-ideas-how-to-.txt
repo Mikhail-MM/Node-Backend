@@ -19,3 +19,70 @@ You can also JSON_AGG with json_build_object
       
       db.raw(`ARRAY_REMOVE(ARRAY_AGG(${TABLES.TAGS}.title), NULL) as tags`),
       db.raw(`ARRAY_REMOVE(ARRAY_AGG(${TABLES.TAGS}.id), NULL) as tagids`),
+
+
+    Resources to Compile:
+    Shalicat's easy roll
+
+    _(data)
+  .groupBy(x => x.post_id)
+  .map(x => {
+    const post = _.pick(x[0], ['post_id', 'title', 'content', 'created_at', 'posted_by'])
+    const tags = _(x).filter(t => t.tag_id).map(t => ({ id: t.tag_id, title: t.tag_title  }))
+  
+    return {
+      ...post,
+      tags
+    }
+  })
+
+
+  MY gist is on Github
+
+  Vanishy wrote one , as did samsch
+
+  Sam:
+https://gist.github.com/samsch/b7f6c74d8974fe09ae5a2417967fdf7b
+
+  Vanishy:
+  const aggregate = (data, index, aggregateMap) => {
+  const rowsById = data.reduce((acc, cur) => {
+    const row = acc[cur[index]];
+    if (row) {
+      for (const [agg, columns] of Object.entries(aggregateMap)) {
+        const obj = {};
+        for (const column of columns) {
+          obj[column] = cur[column];
+        }
+        row[agg].push(obj);
+      }
+    } else {
+      const newRow = { ...cur };
+
+      for (const [agg, columns] of Object.entries(aggregateMap)) {
+        newRow[agg] = [{}];
+
+        for (const column of columns) {
+          newRow[agg][0][column] = cur[column];
+          delete newRow[column];
+        }
+      }
+
+      acc[cur[index]] = newRow;
+    }
+    return acc;
+  }, {});
+
+  const rowsInOrder = data.reduce(
+    (acc, cur) => {
+      if (!acc.includedIds[cur[index]]) {
+        acc.array.push(rowsById[cur[index]]);
+        acc.includedIds[cur[index]] = true;
+      }
+      return acc;
+    },
+    { array: [], includedIds: {} }
+  ).array;
+
+  return rowsInOrder;
+};
