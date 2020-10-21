@@ -4,7 +4,7 @@ const { TABLES } = require('../database');
 
 const numChatRooms = Number(process.env.SEED_NUM_CHATROOMS);
 
-const payload = Array.from({ length: numChatRooms}, (_) => ({
+const payload = Array.from({ length: numChatRooms}, () => ({
   name: faker.name.jobType(),
 }));
 

@@ -14,7 +14,8 @@ const {
   UsersRouter,
   PostsRouter,
   TagsRouter,
-  ChatRoomsRouter
+  ChatRoomsRouter,
+  MessagesRouter
 } = require('./api/routers/index');
 
 // Database Configuration
@@ -57,7 +58,7 @@ app.use('/users', UsersRouter);
 app.use('/posts', PostsRouter);
 app.use('/tags', TagsRouter);
 app.use('/chatrooms', ChatRoomsRouter);
-
+app.use('/messages', MessagesRouter);
 //Sanity Check
 app.get('/', (req, res, next) => {
   res.send('Server is running.');
@@ -86,6 +87,9 @@ app.get('/test-session', (req, res, next) => {
     sessionExpirationTime: req.session.cookie.maxAge / 1000,
   });
 });
+
+// 404 Handler
+app.use('*', (req, res, next) => res.status(404).send("This route does not exist."));
 
 // Express Error Handler
 app.use('*', function (err, req, res, next) {
