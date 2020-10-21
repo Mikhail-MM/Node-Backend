@@ -11,6 +11,8 @@ while (payload.length < numTags) {
     payload.push({ title: tag });
 }
 
+console.log(payload);
+
 exports.seed = async function (knex) {
   await knex(TABLES.TAGS).del();
   await knex(TABLES.TAGS).insert(payload);
