@@ -30,6 +30,8 @@ const payload = Array.from({ length: numMessages }, () => ({
   message: faker.random.words(getRandomInt(8, 20)),
 }));
 
+console.log(payload);
+
 exports.seed = async function (knex) {
   await knex(TABLES.MESSAGES).del();
   await knex(TABLES.MESSAGES).insert(payload)

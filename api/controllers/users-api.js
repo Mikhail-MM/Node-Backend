@@ -4,6 +4,7 @@ const {
   createUser,
   findAllUsers,
   findUserByID,
+  findUsersByChatRoomID,
   findUsersByLookup,
   deleteUserByID,
   updateUserByID,
@@ -30,6 +31,16 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
+const fetchUsersByChatRoom = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await findUsersByChatRoomID({ id });
+    res.send(data);
+  } catch(err) {
+    next(err);
+  }
+}
+
 const registerNewUser = async (req, res, next) => {
   try {
     const { password, ...userData } = req.body;
@@ -45,9 +56,9 @@ const registerNewUser = async (req, res, next) => {
       hashed_password: await encryptPassword(password),
       ...userData,
     });
-    const { id } = newUserData;
+    const { id, email } = newUserData;
     req.session.user_id = id;
-    res.send(newUserData);
+    res.send({user_id: id, email});
   } catch (err) {
     next(err);
   }
@@ -103,7 +114,7 @@ const loginUser = async (req, res, next) => {
       return res.status(403).send('Incorrect Password.');
     }
     req.session.user_id = id;
-    res.json({ user_id: id });
+    res.json({ user_id: id, email });
   } catch (err) {
     next(err);
   }
@@ -112,7 +123,9 @@ const loginUser = async (req, res, next) => {
 const checkSession = async (req, res, next) => {
   try {
     if (req.session.user_id) {
-      res.json({ user_id: req.session.user_id });
+      console.log(req.session.user_id);
+      const { id, email } = await findUserByID({ id: req.session.user_id });
+      res.json({ user_id: id, email });
     } else {
       res.json({ isAuthenticated: false });
     }
@@ -136,6 +149,7 @@ const logOut = async (req, res, next) => {
 module.exports = {
   fetchUsers,
   fetchUser,
+  fetchUsersByChatRoom,
   registerNewUser,
   deleteUser,
   updateUser,

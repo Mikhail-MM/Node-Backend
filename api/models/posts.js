@@ -33,6 +33,7 @@ const findAllPosts = () => {
   return db
     .select(
       `${TABLES.POSTS}.title`,
+      `${TABLES.POSTS}.id`,
       `${TABLES.POSTS}.content`,
       `${TABLES.POSTS}.created_at`,
       db.raw(`JSON_AGG(${TABLES.TAGS}) as tags`),

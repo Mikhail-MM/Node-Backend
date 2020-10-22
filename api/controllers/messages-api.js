@@ -2,6 +2,7 @@ const {
   createMessage,
   findAllMessages,
   findMessageByID,
+  findMessagesByRoomId,
   deleteMessageByID,
   updateMessageByID,
 } = require('../models/Messages');
@@ -24,6 +25,16 @@ const fetchMessage = async (req, res, next) => {
     next(err);
   }
 };
+
+const fetchMessagesByRoomId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await findMessagesByRoomId({ id });
+    res.send(data);
+  } catch(err) {
+    next(err);
+  }
+}
 
 const registerNewMessage = async (req, res, next) => {
   try {
@@ -64,4 +75,5 @@ module.exports = {
   registerNewMessage,
   deleteMessage,
   updateMessage,
+  fetchMessagesByRoomId,
 };

@@ -3,6 +3,7 @@ const { Router } = require('express');
 const {
   fetchMessages,
   fetchMessage,
+  fetchMessagesByRoomId,
   registerNewMessage,
   deleteMessage,
   updateMessage,
@@ -10,6 +11,7 @@ const {
 
 const MessagesRouter = Router();
 
+MessagesRouter.get('/rooms/:id', fetchMessagesByRoomId);
 MessagesRouter.get('/:id', fetchMessage);
 MessagesRouter.get('/', fetchMessages);
 

@@ -3,6 +3,7 @@ const { Router } = require('express');
 const {
   fetchUsers,
   fetchUser,
+  fetchUsersByChatRoom,
   registerNewUser,
   deleteUser,
   updateUser,
@@ -12,6 +13,8 @@ const {
 } = require('../controllers/users-api');
 
 const UsersRouter = Router();
+
+UsersRouter.get('/rooms/:id', fetchUsersByChatRoom);
 UsersRouter.get('/logout', logOut);
 UsersRouter.get('/checkSession', checkSession);
 UsersRouter.get('/:id', fetchUser);

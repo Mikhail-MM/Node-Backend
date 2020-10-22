@@ -137,7 +137,7 @@ server.on('upgrade', (req, socket, head) => {
   sessionParser(req, {}, () => {
     console.log(req.session);
     if (!req.session.user_id) {
-      console.log("Unauthorized eh")
+      console.log("UNAUTHORIZED SESSION.")
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
       socket.destroy();
       return;

@@ -9,6 +9,27 @@ const findAllMessages = () => {
   return db.select().from(TABLES.MESSAGES);
 };
 
+const findMessagesByRoomId = ({ id }) => {
+  return db
+    .select(
+      `${TABLES.MESSAGES}.id`,
+      `${TABLES.MESSAGES}.created_at`,
+      `${TABLES.MESSAGES}.message`,
+      `${TABLES.MESSAGES}.created_at`,
+      `${TABLES.USERS}.email as created_by`,
+    )
+    .from(TABLES.MESSAGES)
+    .join(
+      TABLES.USERS,
+      `${TABLES.USERS}.id`,
+      `${TABLES.MESSAGES}.user_id`,
+    )
+    .where({
+      [`${TABLES.MESSAGES}.chatroom_id`]: id,
+    })
+    .orderBy(`${TABLES.MESSAGES}.created_at`);
+};
+
 const findMessageByID = ({ id }) => {
   return db
     .select()
@@ -35,4 +56,5 @@ module.exports = {
   findMessageByID,
   deleteMessageByID,
   updateMessageByID,
+  findMessagesByRoomId,
 };
