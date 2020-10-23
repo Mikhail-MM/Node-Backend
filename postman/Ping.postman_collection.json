@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "29c78cda-8479-4158-8103-113a35da7463",
+		"name": "Ping",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ping Dev",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}",
+					"host": [
+						"{{DEV_API_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Session",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/test-session",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"test-session"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

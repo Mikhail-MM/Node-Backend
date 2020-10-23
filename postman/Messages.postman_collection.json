@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "249d91a8-5843-4a6a-9742-8f998e9e6f79",
+		"name": "Messages",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Messages",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/messages",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Message By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/messages/3",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"messages",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Message By Room ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/messages/rooms/2",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"messages",
+						"rooms",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Message By ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message\": \"Updated Message!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{DEV_API_URL}}/messages/2",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"messages",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message By ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/messages/2",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"messages",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Message",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"message\": \"My First Post! Yay!!\", \"chatroom_id\": 1, \"user_id\": 1 }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{DEV_API_URL}}/messages",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b188a1d4-e7b3-42ab-85ef-c0d1f0b5630f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "dc3e2fbb-528b-485f-abac-2f1034309051",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -12,7 +12,7 @@ const handleMessage = async (message) => {
       case 'messages/createMessage': {
         const { message, chatroom_id } = parsedMessage;
         const ws = socketSwitchBoard.get(user_id);
-        const { created_at } = await createMessage({ message, chatroom_id, user_id });
+        const { created_at, id } = await createMessage({ message, chatroom_id, user_id });
         ws.send(
           JSON.stringify({
             type: 'notification',
@@ -24,6 +24,7 @@ const handleMessage = async (message) => {
           ws.send(
             JSON.stringify({
               type: 'messages/createMessage',
+              id,
               message,
               created_by: email, 
               created_at,

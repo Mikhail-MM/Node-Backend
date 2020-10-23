@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "bfb8de98-ab1a-4eda-9a51-0d49ff347d55",
+		"name": "Chatrooms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Chatrooms",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/chatrooms",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"chatrooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Chatroom By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/chatrooms/2",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"chatrooms",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Chatroom By ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Updated Title!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{DEV_API_URL}}/chatrooms/2",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"chatrooms",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Tag By ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{DEV_API_URL}}/chatrooms/2",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"chatrooms",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Tag",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"My First Post! Yay!!\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{DEV_API_URL}}/chatrooms",
+					"host": [
+						"{{DEV_API_URL}}"
+					],
+					"path": [
+						"chatrooms"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2661b97a-f00d-4e21-a400-e46dbd928555",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "584becb6-b826-4078-ba98-bf38bbcaa32b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
