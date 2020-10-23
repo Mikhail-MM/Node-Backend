@@ -1,8 +1,12 @@
 const { db, TABLES } = require('../../db/database');
 
 // All of these functions return promises.
-const createMessage = (data) => {
-  return db.insert(data).into(TABLES.MESSAGES).returning('*');
+const createMessage = ({ message, chatroom_id, user_id }) => {
+  return db
+    .insert({ message, chatroom_id, user_id })
+    .into(TABLES.MESSAGES)
+    .returning('*')
+    .then(([message]) => message);
 };
 
 const findAllMessages = () => {

@@ -12,6 +12,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const { initializeSocket } = require('./websocket/socket');
+
 // All Indexed Routers
 const {
   UsersRouter,
@@ -33,7 +35,6 @@ const { cookieParser } = require('./middleware/cookieParser');
 const { InfoLogger, ErrorLogger } = require('./logger');
 
 const { APIPort } = require('./config');
-const { request } = require('http');
 
 // Log Unhandled Exceptions to File
 process
@@ -124,44 +125,11 @@ app.use('*', function (err, req, res, next) {
 
 // WebSocket Implementation
 
-const socketSwitchBoard = new Map();
-
 const wss = new WebSocket.Server({ clientTracking: false, noServer: true });
 
 const server = http.createServer(app);
 
-server.on('upgrade', (req, socket, head) => {
-  console.log("HTTP Upgrade Request Detected");
-  console.log("Parsing Express Session");
-  console.log(req.session);
-  sessionParser(req, {}, () => {
-    console.log(req.session);
-    if (!req.session.user_id) {
-      console.log("UNAUTHORIZED SESSION.")
-      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-      socket.destroy();
-      return;
-    }
-    wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit('connection', ws, req);
-    });
-  })
-});
-
-wss.on('connection', (ws, req) => {
-  console.log("WSS Connection Event - Parsing User ID!");
-  const { user_id } = req.session;
-  console.log("Adding user to switchboard", user_id);
-  socketSwitchBoard.set(user_id, ws);
-  ws.on('message', (message) => {
-    //c an access session properties
-    console.log("Message:", message);
-  })
-  ws.on('close', () => {
-    console.log("User Disconnected, deleting from switchboard:", user_id)
-    socketSwitchBoard.delete(user_id);
-  });
-});
+initializeSocket(server, wss);
 
 server.listen(APIPort, () => {
   InfoLogger.info(
@@ -182,5 +150,5 @@ db.raw("SELECT tablename FROM pg_tables WHERE schemaname='public'")
     });
     process.exit(1);
   });
-
+////
 module.exports = { server };
